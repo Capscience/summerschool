@@ -33,6 +33,17 @@ int main(int argc, char *argv[])
     /* TODO: use a single collective communication call
      *       (and maybe prepare some parameters for the call)
      */
+    std::vector<int> block_displacements = {0, 1, 2, 4};
+    std::vector<int> block_counts = {1, 1, 2, 4};
+    MPI_Alltoall(
+        sendbuf.data(), 
+        2,
+        MPI_INT,
+        recvbuf.data(),
+        2,
+        MPI_INT,
+        MPI_COMM_WORLD
+    );
 
     /* Print data that was received */
     /* TODO: use correct buffer */
