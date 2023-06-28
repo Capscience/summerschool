@@ -14,14 +14,54 @@ void exchange(field *temperature, parallel_data *parallel)
     double *data;
     double *sbuf_up, *sbuf_down, *rbuf_up, *rbuf_down;
 
+    sbuf_up = (double *)malloc(sizeof(double) * temperature->nx + 2);
+    sbuf_down = (double *)malloc(sizeof(double) * temperature->nx + 2);
+    rbuf_up = (double *)malloc(sizeof(double) * temperature->nx + 2);
+    rbuf_down = (double *)malloc(sizeof(double) * temperature->nx + 2);
+    data = temperature->data;
+
     // TODO start: implement halo exchange
 
     // You need to do a little bit of math to determine correct linear
     // indeces for inner boundaries and ghost layers
 
     // Send to up, receive from down
+    for (int i = 0; i < temperature->nx + 2; i++) {
+        sbuf_up[i] = data[(i * temperature->ny + 2) + temperature->ny];
+    }
+    MPI_Sendrecv(
+        &sbuf_up,
+        temperature->nx + 2,
+        MPI_DOUBLE,
+        parallel->nup,
+        42,
+        &rbuf_down,
+        temperature->nx + 2,
+        MPI_DOUBLE,
+        parallel->ndown,
+        42,
+        MPI_COMM_WORLD,
+        MPI_STATUS_IGNORED
+    );
 
     // Send to down, receive from up
+    for (int i = 0; i < temperature->nx + 2; i++) {
+        sbuf_up[i] = data[(i * temperature->ny + 2) + 1];
+    }
+    MPI_Sendrecv(
+        &sbuf_down,
+        temperature->nx + 2,
+        MPI_DOUBLE,
+        parallel->ndown,
+        42,
+        &rbuf_up,
+        temperature->nx + 2,
+        MPI_DOUBLE,
+        parallel->nup,
+        42,
+        MPI_COMM_WORLD,
+        MPI_STATUS_IGNORED
+    );
 
 
     // TODO end
