@@ -29,18 +29,6 @@ int main(int argc, char **argv)
 
   // TODO start: initialize MPI
     MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &parallelization.size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &parallelization.rank);
-    if (parallelization.rank == 0) {
-        parallelization.ndown = MPI_PROC_NULL;
-        parallelization.nup = 1;
-    } else if (parallelization.rank == parallelization.size - 1) {
-        parallelization.ndown = parallelization.size - 2;
-        parallelization.nup = MPI_PROC_NULL;
-    } else {
-        parallelization.ndown = parallelization.rank - 1;
-        parallelization.nup = parallelization.rank + 1;
-    }
   // TODO end
 
     initialize(argc, argv, &current, &previous, &nsteps, &parallelization);
