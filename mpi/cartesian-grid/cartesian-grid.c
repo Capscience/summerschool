@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <mpi.h>
 
 
@@ -36,9 +37,28 @@ int main(int argc, char* argv[]) {
 
     /* Create the 2D Cartesian communicator */
     /* TODO */
+    MPI_Dims_create(ntasks, 2, dims);
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, period, true, &comm2d);
 
     /* Find out and store the neighboring ranks */
     /* TODO */
+
+    MPI_Cart_coords(comm2d, myid, 2, coords);
+
+    MPI_Cart_shift(
+            comm2d,
+            0,
+            1,
+            &neighbors[0],
+            &neighbors[1]
+    );
+    MPI_Cart_shift(
+            comm2d,
+            1,
+            1,
+            &neighbors[2],
+            &neighbors[3]
+    );
 
     /* Find out and store also the Cartesian coordinates of a rank */
     /* TODO */
