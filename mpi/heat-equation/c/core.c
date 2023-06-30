@@ -24,18 +24,18 @@ void exchange(field *temperature, parallel_data *parallel)
                  parallel->ndown, 11, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
     // Send to the down, receive from up
-    //sbuf_down = data + temperature->nx * (temperature->ny + 2); // lower data
-    //rbuf_up = data; // upper halo
-//
-    //MPI_Sendrecv(sbuf_down, temperature->ny + 2, MPI_DOUBLE,
-                 //parallel->ndown, 12,
-                 //rbuf_up, temperature->ny + 2, MPI_DOUBLE,
-                 //parallel->nup, 12, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-//
-    //sbuf_up = (double *)malloc(sizeof(double) * (temperature->ny + 2));
-    //sbuf_down = (double *)malloc(sizeof(double) * (temperature->ny + 2));
-    //rbuf_up = (double *)malloc(sizeof(double) * (temperature->ny + 2));
-    //rbuf_down = (double *)malloc(sizeof(double) * (temperature->ny + 2));
+    sbuf_down = data + temperature->nx * (temperature->ny + 2); // lower data
+    rbuf_up = data; // upper halo
+
+    MPI_Sendrecv(sbuf_down, temperature->ny + 2, MPI_DOUBLE,
+                 parallel->ndown, 12,
+                 rbuf_up, temperature->ny + 2, MPI_DOUBLE,
+                 parallel->nup, 12, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+    sbuf_up = (double *)malloc(sizeof(double) * (temperature->ny + 2));
+    sbuf_down = (double *)malloc(sizeof(double) * (temperature->ny + 2));
+    rbuf_up = (double *)malloc(sizeof(double) * (temperature->ny + 2));
+    rbuf_down = (double *)malloc(sizeof(double) * (temperature->ny + 2));
     //data = temperature->data;
 //
     //// TODO start: implement halo exchange
