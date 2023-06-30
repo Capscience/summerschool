@@ -9,4 +9,4 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --reservation=summerschool_standard
 
-srun heat_mpi
+srun heat_mpi ../common/bottle.dat 3000

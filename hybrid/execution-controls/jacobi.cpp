@@ -31,12 +31,14 @@ int main()
     //             in this parallel region
 
     // Read b
+#pragma omp single
     read_file(b);
 
     int nx = b.nx;
     int ny = b.ny;
 
     // Allocate space also for  boundaries
+#pragma omp single
     u.allocate(nx + 2, ny + 2);
 
     // Initialize
@@ -45,11 +47,14 @@ int main()
         for (int j=0; j < ny + 2; j++) 
             u(i, j) = 0.0;
 
+#pragma omp single
     unew = u;
 
     // Jacobi iteration
     do {
+#pragma omp barrier
         norm = 0.0;
+#pragma omp barrier
 
         #pragma omp for reduction(+:norm)
         for (int i=1; i < nx + 1; i++)
@@ -61,11 +66,14 @@ int main()
                 norm += (unew(i, j) - u(i, j)) * (unew(i, j) - u(i, j));
             } 
 
+#pragma omp single
+	{
         std::swap(unew, u);
 
         if (iter % 500 == 0)
             std::cout << "Iteration " << iter << " norm: " << norm << std::endl;
         iter++;    
+	}
 
     } while (norm > eps);
 
