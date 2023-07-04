@@ -37,18 +37,23 @@ int main(int argc, char **argv)
 
     //Get the start time stamp 
     auto start_clock = omp_get_wtime();
-
+    
+    auto *currdata = current.temperature.data();
+    auto *prevdata = previous.temperature.data();
+    auto data_size = current.temperature.size();
+#pragma omp target enter data map(to:currdata[0:data_size],prevdata[0:data_size])
     // Time evolve
     for (int iter = 1; iter <= nsteps; iter++) {
-        evolve(current, previous, a, dt);
+        evolve(current, previous, a, dt, currdata, prevdata);
         if (iter % image_interval == 0) {
+#pragma omp target update to(currdata[0:current.temperature.size()])
             write_field(current, iter);
         }
         // Swap current field so that it will be used
         // as previous for next iteration step
         std::swap(current, previous);
     }
-
+#pragma omp target exit data map(from:currdata[0:data_size],prevdata[0:data_size])
     auto stop_clock = omp_get_wtime();
 
     // Average temperature for reference 

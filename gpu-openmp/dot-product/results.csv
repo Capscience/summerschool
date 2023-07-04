@@ -1,0 +1,3 @@
+"Index","KernelName","gpu-id","queue-id","queue-index","pid","tid","grd","wgr","lds","scr","arch_vgpr","accum_vgpr","sgpr","wave_size","sig","obj","DispatchNs","BeginNs","EndNs","CompleteNs","DurationNs"
+0,"__omp_offloading_eeba6730_6b01b365_main_l10_cce$noloop$form.kd",0,0,0,46992,46992,102400,256,0,224,48,0,48,64,"0x0","0x145642459480",5780785549119837,5780785550662421,5780785550702261,5780785550767952,39840
+1,"__omp_offloading_eeba6730_6b01b365_main_l21.kd",0,0,2,46992,46992,56320,256,512,1008,36,4,48,64,"0x0","0x145642459440",5780785562910673,5780785563244125,5780785563493087,5780785563535901,248962

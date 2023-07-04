@@ -4,7 +4,14 @@
 
 // TODO: add a device kernel that copies all elements of a vector
 //       using GPU threads in a 2D grid
+__global__ void dcopy_(double *x, double *y, int size)
+{
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+	int stride = gridDim.x * blockDim.x;
 
+	for (; tid < size; tid += stride)
+		y[tid] = x[tid];
+}
 
 int main(void)
 {
@@ -28,13 +35,21 @@ int main(void)
     }
 
     // TODO: allocate vectors x_ and y_ on the GPU
+    hipMalloc(&x_, sizeof(double) * size);
+    hipMalloc(&y_, sizeof(double) * size);
     // TODO: copy initial values from CPU to GPU (x -> x_ and y -> y_)
+    hipMemcpyHtoD(x_, x, sizeof(double) * size);
+    hipMemcpyHtoD(y_, y, sizeof(double) * size);
 
     // TODO: define grid dimensions (use 2D grid!)
+    dim3 blocks(4, 6);
+    dim3 threads(16, 16);
+
     // TODO: launch the device kernel
-    hipLaunchKernelGGL(...);
+	dcopy_<<<blocks, threads>>>(x_, y_, size);
 
     // TODO: copy results back to CPU (y_ -> y)
+	hipMemcpyDtoH(y, y_, sizeof(double) * size);
 
     // confirm that results are correct
     double error = 0.0;

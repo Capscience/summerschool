@@ -1,0 +1,7 @@
+Rank: 0, nup -1, ndown 1
+Rank: 1, nup 0, ndown 2
+Rank: 2, nup 1, ndown 3
+Rank: 3, nup 2, ndown -1
+Average temperature at start: 86.513850
+Iteration took 0.035 seconds.
+Average temperature: 87.752925

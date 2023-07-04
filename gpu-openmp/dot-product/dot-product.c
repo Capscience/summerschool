@@ -7,6 +7,9 @@ int main(void)
     double vecA[NX], vecB[NX];
 
     // Initialization of the vectors
+#pragma omp target map(from:vecA,vecB)
+#pragma omp teams
+#pragma omp distribute parallel for
     for (int i = 0; i < NX; i++) {
         vecA[i] = 1.0 / ((double) (NX - i));
         vecB[i] = vecA[i] * vecA[i];
@@ -15,6 +18,9 @@ int main(void)
     // TODO start: offload and parallelize the computation
 
     double res = 0.0;
+#pragma omp target map(to:vecA,vecB) map(tofrom:res)
+#pragma omp teams reduction(+:res)
+#pragma omp distribute// parallel for
     for (int i = 0; i < NX; i++) {
         res += vecA[i] * vecB[i];
     }

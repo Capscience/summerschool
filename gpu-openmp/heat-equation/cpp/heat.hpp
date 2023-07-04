@@ -25,7 +25,7 @@ struct Field {
 void initialize(int argc, char *argv[], Field& current,
                 Field& previous, int& nsteps);
 
-void evolve(Field& curr, Field& prev, const double a, const double dt);
+void evolve(Field& curr, Field& prev, const double a, const double dt, double *currdata, double *prevdata);
 
 void write_field(const Field& field, const int iter);
 
